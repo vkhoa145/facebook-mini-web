@@ -1,5 +1,7 @@
+import SignUp from "@/components/sign-up/sign-up";
+
 export default function SignUpModal() {
   return (
-    <h1>Sign Up Modal</h1>
+    <SignUp/>
   )
 }
