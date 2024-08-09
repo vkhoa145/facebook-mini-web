@@ -1,4 +1,4 @@
-import { CHECK_VALID_FORM, CHECK_VALID_NAME, SET_DAY, SET_DAYS, SET_DYNAMIC_FIELD, SET_DYNAMIC_LABEL, SET_MONTH, SET_NAME_FIELD, SET_YEAR, SET_YEARS } from "./constant";
+import { CHECK_VALID_FORM, CHECK_VALID_NAME, SET_DAY, SET_DAYS, SET_DYNAMIC_FIELD, SET_DYNAMIC_LABEL, SET_MONTH, SET_NAME_FIELD, SET_VERIFICATION, SET_YEAR, SET_YEARS } from "./constant";
 
 export default function reducer(state, action) {
   switch(action.type) {
@@ -51,7 +51,12 @@ export default function reducer(state, action) {
     case CHECK_VALID_FORM:
       return {
         ...state,
-        isFormValid: action.payload
+        isDisabled: action.payload
+      }
+    case SET_VERIFICATION:
+      return {
+        ...state,
+        isVerification: action.payload
       }
     default:
       throw new Error('invalid action')

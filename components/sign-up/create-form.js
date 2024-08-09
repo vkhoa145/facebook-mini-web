@@ -6,27 +6,12 @@ import { useEffect, useReducer, useState } from "react"
 import reducer from "./reducer/reducer";
 import { checkValidForm, checkValidName, setDay, setDays, setDynamicField, setDynamicLabel, setMonth, setNameField, setYear, setYears } from "./reducer/action";
 import { capitalizeFirstLetter } from "@/utils/format-string";
+import { initState } from "./reducer/state";
 
-
-const initState = {
-  name: '',
-  dynamicField: '',
-  dynamicLabel: 'email',
-  month: '',
-  day: '',
-  days: ['',...getDaysByMonthAndYear('')],
-  year: '',
-  years: getListOfYears(),
-  isNameValid: true,
-  isFormValid: true
-}
-
-export default function CreateForm() {
+export default function CreateForm({handleSubmitForm}) {
   const [state, dispatch] = useReducer(reducer, initState)
-  const { name, dynamicField, dynamicLabel, month, day, days, year, years, isNameValid, isFormValid } = state
+  const { name, dynamicField, dynamicLabel, month, day, days, year, years, isNameValid, isDisabled } = state
   const [isValid, errMessage] = useValidation(dynamicField, dynamicLabel)
-
-  
 
   const handleChangeLabel = () => {
     let label = dynamicLabel === 'email' ? 'phone' : 'email'
@@ -45,7 +30,7 @@ export default function CreateForm() {
     let leapYears = getListOfYears(parseInt(month), parseInt(day))
     dispatch(setYears(leapYears))
   }
- 
+
   const handleDayChange = (event) => {
     let day = event.target.value;
     dispatch(setDay(day))
@@ -83,11 +68,7 @@ export default function CreateForm() {
 
   const errorText = isValid ? (<></>) : (<p className="text-red-500">{errMessage}</p>)
   const nameError = isNameValid ? (<></>) : (<p className="text-red-500">What's your name?</p>)
-  const disabledButtonClass = isFormValid ? 'bg-slate-600' : 'bg-sky-600  cursor-pointer'
-
-
-  const handleFormChange = () => {
-  }
+  const disabledButtonClass = isDisabled ? 'bg-slate-600' : 'bg-sky-600  cursor-pointer'
 
   return (
     <>
@@ -106,8 +87,8 @@ export default function CreateForm() {
             <div className="w-3/5 mt-3 flex flex-col mr-2">
               <label className="font-sm">Month</label>
               <select onChange={handleMonthChange} value={month} className="w-full h-10 bg-neutral-900 focus:outline-none focus:border-3 focus:border-sky-500 rounded border-slate-500 border">
-                {listOfMonths.map((month) => (
-                  <option key={month} value={month.value}>{month.label}</option>
+                {listOfMonths.map((month, index) => (
+                  <option key={index} value={month.value}>{month.label}</option>
                 ))}
               </select>
             </div>
@@ -122,15 +103,15 @@ export default function CreateForm() {
             <div className="w-1/4 flex flex-col mt-3">
               <label className="font-sm">Year</label>
               <select onChange={handleYearChange} value={year} className="bg-neutral-900 rounded border-slate-500 border h-10 focus:outline-none focus:border-3 focus:border-sky-500">
-                {years.map((year) => (
-                  <option key={year} value={year}>{year}</option>
+                {years.map((year, index) => (
+                  <option key={index} value={year}>{year}</option>
                 ))}
               </select>
             </div>
           </div>
         </div>
-        <div className={`${disabledButtonClass} flex justify-center items-center rounded-full mt-20 h-12`} onClick={handleFormChange}>
-          <input disabled={isFormValid} type="submit" value="Next"/>
+        <div className={`${disabledButtonClass} flex justify-center items-center rounded-full mt-20 h-12`} onClick={handleSubmitForm}>
+          <input disabled={isDisabled} type="submit" value="Next"/>
         </div>
       </form>
     </>

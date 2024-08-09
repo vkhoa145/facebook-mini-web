@@ -1,4 +1,4 @@
-import { CHECK_VALID_FORM, CHECK_VALID_NAME, SET_DAY, SET_DAYS, SET_DYNAMIC_FIELD, SET_DYNAMIC_LABEL, SET_MONTH, SET_NAME_FIELD, SET_YEAR, SET_YEARS } from "./constant"
+import { CHECK_VALID_FORM, CHECK_VALID_NAME, SET_DAY, SET_DAYS, SET_DYNAMIC_FIELD, SET_DYNAMIC_LABEL, SET_MONTH, SET_NAME_FIELD, SET_VERIFICATION, SET_YEAR, SET_YEARS } from "./constant"
 
 export const setNameField = (payload) => {
   return {
@@ -37,7 +37,7 @@ export const setDay = (payload) => {
 
 export const setDays = (payload) => {
   return {
-    type: SET_DAYS, 
+    type: SET_DAYS,
     payload: payload
   }
 }
@@ -66,6 +66,13 @@ export const checkValidName = (payload) => {
 export const checkValidForm = (payload) => {
   return {
     type: CHECK_VALID_FORM,
+    payload: payload
+  }
+}
+
+export const setVerification = (payload) => {
+  return {
+    type: SET_VERIFICATION,
     payload: payload
   }
 }

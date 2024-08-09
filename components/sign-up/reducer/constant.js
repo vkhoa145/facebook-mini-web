@@ -16,4 +16,6 @@ export const SET_YEARS = 'set_years';
 
 export const CHECK_VALID_NAME = 'check_valid_name';
 
-export const CHECK_VALID_FORM = 'check_valid_form'
+export const CHECK_VALID_FORM = 'check_valid_form';
+
+export const SET_VERIFICATION = 'set_verification';

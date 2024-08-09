@@ -3,81 +3,24 @@
 import {faGalacticRepublic } from "@fortawesome/free-brands-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useReducer, useState } from "react";
 import CreateForm from "./create-form";
 import VerificationForm from "./verification-form";
-import { useValidation } from "@/hooks/useValidation"
-import { getDaysByMonthAndYear, getListOfYears, listOfMonths } from "@/lib/date";
+import reducer from "./reducer/reducer";
+import { initState } from "./reducer/state";
+import { setVerification } from "./reducer/action";
 
 
 export default function SignUp() {
-  const [field, setField] = useState('Email')
-  const [monthValue, setMonthValue] = useState('')
-  const [years, setYears] = useState(getListOfYears())
-  const [dayValue, setDayValue] = useState('')
-  const [yearValue, setYearValue] = useState('')
-  const [days, setDays] = useState(['',...getDaysByMonthAndYear('')])
-  const [toggleValue, seToggleValue] = useState('')
-  const [isValid, errMessage] = useValidation(toggleValue, field.toLowerCase())
-  const [nameField, setNameField] = useState('')
-  const [isNameValid, setIsNameValid] = useState(true)
-  const [isDisabled, setIsDisabled] = useState(false)
-  const [isVerification, setIsVerification] = useState(false)
+  const [state, dispatch] = useReducer(reducer, initState)
+  const { isVerification } = state
 
-  const handleChangeToggleField = (event) => {
-    seToggleValue(event.target.value)
+  const handleSubmit = () => {
+    console.log('state', state)
+    console.log('isFormValid', isVerification)
+    dispatch(setVerification(true))
   }
-
-  const handleChangeField = () => {
-    let value = field == 'Email' ? 'Phone' : 'Email'
-    setField(value)
-    seToggleValue('')
-  }
-
-  const textButton = field === 'Email' ? 'Phone' : 'Email'
-
-  const handleMonthChange = (event) => {
-    let month = event.target.value;
-    setMonthValue(month);
-
-    let dayList = ['',...getDaysByMonthAndYear(month, yearValue)]
-    setDays(dayList)
-
-    let leapYears = getListOfYears(parseInt(month), parseInt(dayValue))
-    setYears(leapYears)
-  }
- 
-  const handleDayChange = (event) => {
-    let day = event.target.value;
-    setDayValue(day)
-
-    let leapYears = getListOfYears(parseInt(monthValue), parseInt(day))
-    setYears(leapYears)
-  }
-
-  const handleYearChange = (event) => {
-    let year = event.target.value;
-    setYearValue(year)
-
-    let days = ['',...getDaysByMonthAndYear(monthValue, year)]
-    setDays(days)
-  }
-
-  const handleChangeNameField = (event) => {
-    let nameValue = event.target.value;
-    console.log('value:', nameValue)
-    setNameField(nameValue)
-    if (nameValue === '') {
-      setIsNameValid(false)
-    } else {
-      setIsNameValid(true)
-    }
-  }
-
-  const errorText = isValid ? (<></>) : (<p className="text-red-500">{errMessage}</p>)
-  const nameError = isNameValid ? (<></>) : (<p className="text-red-500">What's your name?</p>)
-  const disabledButtonClass = isDisabled ? 'bg-slate-600' : 'bg-sky-600  cursor-pointer'
-  const StepModal = isVerification ?  (<VerificationForm handleFormData={()=> setFormData()}/>) : (<CreateForm />)
+  const StepModal = isVerification ?  (<VerificationForm />) : (<CreateForm handleSubmitForm={() => handleSubmit()}/>)
 
   return (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
