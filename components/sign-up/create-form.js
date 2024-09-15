@@ -2,14 +2,11 @@
 
 import { useValidation } from "@/hooks/useValidation"
 import { getDaysByMonthAndYear, getListOfYears, listOfMonths } from "@/lib/date";
-import { useEffect, useReducer, useState } from "react"
-import reducer from "./reducer/reducer";
+import { useEffect } from "react"
 import { checkValidForm, checkValidName, setDay, setDays, setDynamicField, setDynamicLabel, setMonth, setNameField, setYear, setYears } from "./reducer/action";
 import { capitalizeFirstLetter } from "@/utils/format-string";
-import { initState } from "./reducer/state";
 
-export default function CreateForm({handleSubmitForm}) {
-  const [state, dispatch] = useReducer(reducer, initState)
+export default function CreateForm({handleSubmitForm, state, dispatch}) {
   const { name, dynamicField, dynamicLabel, month, day, days, year, years, isNameValid, isDisabled } = state
   const [isValid, errMessage] = useValidation(dynamicField, dynamicLabel)
 
@@ -72,6 +69,7 @@ export default function CreateForm({handleSubmitForm}) {
 
   return (
     <>
+      <h5 className="font-bold">Create your account</h5>
       <form>
         <input placeholder="Name" value={name} onChange={e => {handleChangeNameField(e)}} className="bg-neutral-900 placeholder:text-slate-600 px-4 rounded border-slate-500 border w-full h-10 focus:outline-none focus:border-3 focus:border-sky-500 mt-3"/>
         {nameError}

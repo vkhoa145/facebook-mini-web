@@ -3,7 +3,7 @@
 import {faGalacticRepublic } from "@fortawesome/free-brands-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useReducer, useState } from "react";
+import { useReducer } from "react";
 import CreateForm from "./create-form";
 import VerificationForm from "./verification-form";
 import reducer from "./reducer/reducer";
@@ -13,14 +13,17 @@ import { setVerification } from "./reducer/action";
 
 export default function SignUp() {
   const [state, dispatch] = useReducer(reducer, initState)
-  const { isVerification } = state
+  const { isVerification, isDisabled } = state
 
   const handleSubmit = () => {
-    console.log('state', state)
-    console.log('isFormValid', isVerification)
-    dispatch(setVerification(true))
+    if (isDisabled === false) {
+      dispatch(setVerification(true))
+    } else {
+      dispatch(setVerification(false))
+    }
+
   }
-  const StepModal = isVerification ?  (<VerificationForm />) : (<CreateForm handleSubmitForm={() => handleSubmit()}/>)
+  const StepModal = isVerification ?  (<VerificationForm state={state} dispatch={dispatch} />) : (<CreateForm handleSubmitForm={() => handleSubmit()} state={state} dispatch={dispatch}/>)
 
   return (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -37,7 +40,6 @@ export default function SignUp() {
               </div>
               <div className="modal-body px-16 flex justify-center my-4">
                 <div className="text-left w-full">
-                  <h5 className="font-bold">Create your account</h5>
                   <div className="signup-form">
                     {StepModal}
                   </div>
