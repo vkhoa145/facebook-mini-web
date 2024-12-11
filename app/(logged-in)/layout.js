@@ -1,5 +1,5 @@
 import MainHeader from "@/components/main-header/main-header";
-import "./globals.css";
+import "../globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
